@@ -1,0 +1,19 @@
+version: v2
+
+modules:
+  - lint:
+      use:
+        - STANDARD
+      except:
+        - FIELD_NOT_REQUIRED
+        - PACKAGE_NO_IMPORT_CYCLE
+      disallow_comment_ignores: true
+    breaking:
+      use:
+        - FILE
+      except:
+        - EXTENSION_NO_DELETE
+        - FIELD_SAME_DEFAULT
+deps:
+  - buf.build/bufbuild/protovalidate:v0.14.2
+  - buf.build/cybozu/protobuf:14a4016c06979dc677b4a0be7d341b849a334c80

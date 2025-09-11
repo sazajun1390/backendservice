@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package user.v1;
+
+import "user/v1/usertoken_api.proto";
+
+
+// Tokenサービス
+service UserService {
+  // ユーザーを作成するRPC
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+
+  // Tokenを取得するRPC
+  rpc GetUserToken(GetUserTokenRequest) returns (GetUserTokenResponse);
+}

@@ -1,0 +1,5 @@
+.data
+go.work
+go.work.*
+.envrc
+.envrc.*

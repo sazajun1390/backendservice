@@ -1,0 +1,26 @@
+version: v2
+managed:
+  enabled: true
+  disable:
+    - file_option: go_package
+      module: buf.build/googleapis/googleapis
+    - file_option: go_package
+      module: buf.build/envoyproxy/protoc-gen-validate
+    - file_option: go_package
+      module: buf.build/bufbuild/protovalidate
+  override:
+    - file_option: go_package_prefix
+      value: github.com/sazajun1390/tokentestserv/pkg/gen/buf/
+plugins:
+  - local: protoc-gen-go
+    out: ../tokentestserv/pkg/gen/buf/
+    opt:
+      - paths=source_relative
+  - local: protoc-gen-validate
+    out: ../tokentestserv/pkg/gen/buf/
+    opt:
+      - paths=source_relative
+      - lang=go
+  - local: protoc-gen-connect-go
+    out: ../tokentestserv/pkg/gen/buf/
+    opt: paths=source_relative

@@ -1,0 +1,74 @@
+
+version: "2"
+overrides:
+  go:
+    overrides:
+      - db_type: "pg_catalog.timestamptz"
+        nullable: true
+        engine: "postgresql"
+        go_type:
+          import: "github.com/uptrace/bun"
+          type: "NullTime"
+      - db_type: "pg_catalog.timestampt"
+        nullable: true
+        engine: "postgresql"
+        go_type:
+          import: "github.com/uptrace/bun"
+          type: "NullTime"
+      - db_type: "pg_catalog.timetz"
+        nullable: true
+        engine: "postgresql"
+        go_type:
+          import: "github.com/uptrace/bun"
+          type: "NullTime"
+      - db_type: "pg_catalog.time"
+        nullable: true
+        engine: "postgresql"
+        go_type:
+          import: "github.com/uptrace/bun"
+          type: "NullTime"
+sql:
+  - schema: "./migrations/postgres"
+    engine: "postgresql"
+    queries: "./queries/query.sql"
+    gen:
+      go:
+        package: "user"
+        out: "../pkg/gen/user"
+        emit_json_tags: true
+        emit_db_tags: true
+        emit_prepared_queries: false
+        emit_interface: false
+        emit_exact_table_names: true
+        overrides:
+          - db_type: "*.timestamptz"
+            nullable: true
+            go_type:
+              import: "github.com/uptrace/bun"
+              package: "bun"
+              type: "NullTime"
+          - db_type: "*.timestampt"
+            nullable: true
+            go_type:
+              import: "github.com/uptrace/bun"
+              package: "bun"
+              type: "NullTime"
+          - db_type: "pg_catalog.timetz"
+            nullable: true
+            go_type:
+              import: "github.com/uptrace/bun"
+              package: "bun"
+              type: "NullTime"
+          - db_type: "pg_catalog.time"
+            nullable: true
+            go_type:
+              import: "github.com/uptrace/bun"
+              package: "bun"
+              type: "NullTime"
+          - db_type: "uuid"
+            go_type:
+              import: "github.com/google/uuid"
+              package: "uuid"
+              type: "UUID"
+
+

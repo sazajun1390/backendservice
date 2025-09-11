@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package user.v1;
+
+import "user/v1/usertoken.proto";
+import "buf/validate/validate.proto";
+
+
+message CreateUserRequest {
+  string user_email = 1 [(buf.validate.field).string.email = true];
+  optional string password = 2 [
+    (buf.validate.field).string.min_len = 1, 
+    (buf.validate.field).string.max_len = 20
+  ];
+  optional string user_tel = 3 [(buf.validate.field).string.pattern = "^\\+81[-0-9]{9,13}$"];
+}
+
+// レスポンステスト用
+message CreateUserResponse {
+  // UserTokenResorce
+  string page_rooting = 1;
+}
+
+// SingUpの認証用
+message VerifyUserRequest {
+  string verify_message = 1;
+}
+
+// 成功時にJWTを返す
+message VerifyUserResponse {
+  UserToken user_token = 1;
+}
+
+// ユーザーProfile作成
+message CreateUserProfileRequest {
+  string user_email = 1 [(buf.validate.field).string.email = true];
+  string user_name = 2;
+  string user_tel = 3 [(buf.validate.field).string.pattern = "^\\+81[-0-9]{9,13}$"];
+}
+
+// UserTokenリクエストテスト用
+message GetUserTokenRequest {
+  // userResourceId
+  string user_email = 1 [(buf.validate.field).string.email = true];
+  
+  // パスワード
+  string password = 2 [
+    (buf.validate.field).string.min_len = 1, 
+    (buf.validate.field).string.max_len = 20
+  ];
+}
+
+// レスポンステスト用
+message GetUserTokenResponse {
+  // UserTokenResorce
+  UserToken user_token = 1;
+}
+

@@ -1,0 +1,77 @@
+services:
+  postgresql:
+    image: postgres:latest
+    container_name: postgresql
+    environment:
+      POSTGRES_DB: chatapp
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./.data/conf.d:/etc/postgresql/conf.d
+      - ./.data/logs:/logs
+      - ./.data/postgresql:/var/lib/postgresql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - service
+  redis:
+    image: valkey/valkey:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./.data/redis:/data
+    networks:
+      - service
+  redis-insight:
+    image: redis/redisinsight:latest
+    container_name: redis-insight
+    ports:
+      - "5540:5540"
+    depends_on:
+      - redis
+    volumes:
+      - ./.data/redis-insight:/db
+    networks:
+      - service
+    restart: always
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - 81:80
+    # pgAdminのログイン情報
+    environment:
+      PGADMIN_DEFAULT_EMAIL: sazajun125@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: JunSaza125
+    volumes:
+      - ./.data/pgadmin:/var/lib/pgadmin
+    networks:
+      - service
+    depends_on:
+      - postgresql
+    restart: always
+  storage:
+    image: minio/minio:latest
+    container_name: storage
+    environment:
+      MINIO_ROOT_USER: "minio_root"
+      MINIO_ROOT_PASSWORD: "minio_password"
+      MINIO_ACCESS_KEY: "minio"
+      MINIO_SECRET_KEY: "minio123"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ./storage:/data
+    command: server /export --address :9000 --console-address :9001
+    networks:
+      - service
+
+networks:
+  service:
+    driver: bridge
