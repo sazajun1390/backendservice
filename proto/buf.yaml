@@ -16,4 +16,5 @@ modules:
         - FIELD_SAME_DEFAULT
 deps:
   - buf.build/bufbuild/protovalidate:v0.14.2
-  - buf.build/cybozu/protobuf:14a4016c06979dc677b4a0be7d341b849a334c80
+  - buf.build/envoyproxy/protoc-gen-validate
+  - buf.build/googleapis/googleapis

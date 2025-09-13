@@ -10,17 +10,17 @@ managed:
       module: buf.build/bufbuild/protovalidate
   override:
     - file_option: go_package_prefix
-      value: github.com/sazajun1390/tokentestserv/pkg/gen/buf/
+      value: github.com/sazajun1390/user/pkg/gen/buf/
 plugins:
   - local: protoc-gen-go
-    out: ../tokentestserv/pkg/gen/buf/
+    out: ../user/pkg/gen/buf/
     opt:
       - paths=source_relative
   - local: protoc-gen-validate
-    out: ../tokentestserv/pkg/gen/buf/
+    out: ../user/pkg/gen/buf/
     opt:
       - paths=source_relative
       - lang=go
   - local: protoc-gen-connect-go
-    out: ../tokentestserv/pkg/gen/buf/
+    out: ../user/pkg/gen/buf/
     opt: paths=source_relative

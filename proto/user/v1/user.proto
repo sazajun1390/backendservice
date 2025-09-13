@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package user.v1;
+
+import "google/protobuf/timestamp.proto";
+
+import "validate/validate.proto";
+
+// Userメッセージ
+message User {
+  // ユーザーID
+  string user_id = 1;
+
+  // ユーザーEmail
+  string user_email = 2;
+
+  // ユーザー名
+  optional string user_name = 3;
+
+  // ユーザー電話番号
+  optional string user_tel = 4;
+
+  // 作成日時
+  google.protobuf.Timestamp created_at = 5 [(validate.rules).timestamp.required = true];
+
+  // 更新日時
+  optional google.protobuf.Timestamp updated_at = 6;
+
+  // 削除日時
+  optional google.protobuf.Timestamp deleted_at = 7;
+
+  // 物理削除予定日
+  optional google.protobuf.Timestamp purged_expires_at = 8;
+}
+
+// UserTokenメッセージ
+message UserToken {
+  // Token
+  // jwtを返す
+  string token = 1;
+}

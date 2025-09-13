@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package user.v1;
 
-import "user/v1/usertoken_api.proto";
+import "user/v1/user_api.proto";
 
 
 // Tokenサービス

@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-package user.v1;
-
-// UserTokenメッセージ
-message UserToken {
-  // ユーザーID
-  string user_id = 1;
-}
