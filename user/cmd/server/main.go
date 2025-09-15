@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/exaring/otelpgx"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/stdlib"
 	"github.com/sazajun1390/backendservice/user/internal/handlers/user"
@@ -27,6 +28,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	config.Tracer = otelpgx.NewTracer()
 	config.DefaultQueryExecMode = pgx.QueryExecModeSimpleProtocol
 
 	sqldb := stdlib.OpenDB(*config)
@@ -54,14 +56,27 @@ func main() {
 	)
 	mux.Handle(path, handler)
 
-	err = http3.ListenAndServeTLS(":51051", "/Users/juntendou/Documents/test-kotlin-connect/tokentestserv/.data/masterCert/cert.pem", "/Users/juntendou/Documents/test-kotlin-connect/tokentestserv/.data/masterCert/key.pem", mux)
-	if err != nil {
-		slog.Error("failed to listen and serve tls", "error", err)
+	h2srv := &http.Server{
+		Handler: h2c.NewHandler(mux, &http2.Server{}),
+		Addr:    ":8080",
 	}
 
-	http.ListenAndServe(
-		":51051",
-		h2c.NewHandler(mux, &http2.Server{}),
-	)
+	h3srv := &http3.Server{
+		Handler: mux,
+		Addr:    ":51051",
+	}
 
+	go func() {
+		err = h3srv.ListenAndServeTLS("/Users/juntendou/Documents/test-kotlin-connect/tokentestserv/.data/masterCert/cert.pem", "/Users/juntendou/Documents/test-kotlin-connect/tokentestserv/.data/masterCert/key.pem")
+		if err != nil {
+			slog.Error("failed to listen and serve h3", "error", err)
+		}
+	}()
+
+	go func() {
+		err = h2srv.ListenAndServe()
+		if err != nil {
+			slog.Error("failed to listen and serve h2", "error", err)
+		}
+	}()
 }

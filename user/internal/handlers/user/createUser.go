@@ -7,10 +7,11 @@ import (
 	"os"
 
 	"connectrpc.com/connect"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"github.com/oklog/ulid/v2"
-	userv1 "github.com/sazajun1390/user/pkg/gen/buf/user/v1"
-	"github.com/sazajun1390/user/pkg/models/user"
+	userv1 "github.com/sazajun1390/backendservice/user/pkg/gen/buf/user/v1"
+	"github.com/sazajun1390/backendservice/user/pkg/models/user"
 
 	"github.com/cockroachdb/errors"
 	"github.com/dimonomid/clock"
@@ -76,7 +77,11 @@ func (s *UserService) CreateUser(ctx context.Context, req *connect.Request[userv
 	}
 
 	res := &userv1.CreateUserResponse{
-		PageRooting: ulid.String(),
+		User: &userv1.User{
+			UserId:    "users/" + ulid.String(),
+			UserEmail: req.Msg.GetUserEmail(),
+			CreatedAt: timestamppb.New(now),
+		},
 	}
 
 	return connect.NewResponse(res), nil

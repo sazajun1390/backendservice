@@ -24,7 +24,7 @@ message CreateUserRequest {
 
 // レスポンステスト用
 message CreateUserResponse {
-  // UserTokenResorce
+  // Userリソース
   User user = 1;
 }
 
@@ -43,18 +43,24 @@ message CreateUserProfileRequest {
 
 // レスポンステスト用
 message CreateUserProfileResponse {
-  // UserTokenResorce
-  string page_rooting = 1;
+  // Userリソース
+  User user = 1;
 }
 
 // SingUpの認証用
 message VerifyUserRequest {
-  string verify_message = 1;
+  // UserリソースID
+  string user_resource_id = 1;
+  // 認証用メッセージ
+  string verify_message = 2;
 }
 
 // 成功時にJWTを返す
 message VerifyUserResponse {
-  UserToken user_token = 1;
+  // Userリソース
+  User user = 1;
+  // UserToken
+  UserToken user_token = 2;
 }
 
 // UserTokenリクエストテスト用
