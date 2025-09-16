@@ -16,13 +16,17 @@ func CreateUser(
 	email string,
 	password string,
 	now time.Time,
-) (*user.Users, error) {
+) (
+	*user.Users,
+	*user.UserProfiles,
+	error,
+) {
 	userMaster := &user.Users{
 		CreatedAt: now,
 	}
 	_, err := idb.NewInsert().Model(userMaster).Exec(ctx)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	userprovision := &user.UserProvision{
@@ -31,12 +35,12 @@ func CreateUser(
 	}
 	_, err = idb.NewInsert().Model(userprovision).Exec(ctx)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	passhash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	userProfile := &user.UserProfiles{
@@ -49,8 +53,8 @@ func CreateUser(
 	}
 	_, err = idb.NewInsert().Model(userProfile).Exec(ctx)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	return userMaster, nil
+	return userMaster, userProfile, nil
 }
