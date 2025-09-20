@@ -18,3 +18,4 @@ deps:
   - buf.build/bufbuild/protovalidate:v0.14.2
   - buf.build/envoyproxy/protoc-gen-validate
   - buf.build/googleapis/googleapis
+  - buf.build/protocolbuffers/wellknowntypes

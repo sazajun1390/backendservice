@@ -7,9 +7,12 @@ import "user/v1/user_api.proto";
 
 // Tokenサービス
 service UserService {
-  // ユーザーを作成するRPC
+  // ユーザーを作成するAPI
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
 
-  // Tokenを取得するRPC
+  // Tokenを取得するAPI
   rpc GetUserToken(GetUserTokenRequest) returns (GetUserTokenResponse);
+  
+  // 仮登録を検証するAPI
+  rpc VerifyUser(VerifyUserRequest) returns (VerifyUserResponse);
 }

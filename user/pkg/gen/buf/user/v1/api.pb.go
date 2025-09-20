@@ -24,26 +24,32 @@ var File_user_v1_api_proto protoreflect.FileDescriptor
 
 const file_user_v1_api_proto_rawDesc = "" +
 	"\n" +
-	"\x11user/v1/api.proto\x12\auser.v1\x1a\x16user/v1/user_api.proto2\xa1\x01\n" +
+	"\x11user/v1/api.proto\x12\auser.v1\x1a\x16user/v1/user_api.proto2\xe8\x01\n" +
 	"\vUserService\x12E\n" +
 	"\n" +
 	"CreateUser\x12\x1a.user.v1.CreateUserRequest\x1a\x1b.user.v1.CreateUserResponse\x12K\n" +
-	"\fGetUserToken\x12\x1c.user.v1.GetUserTokenRequest\x1a\x1d.user.v1.GetUserTokenResponseB\x8c\x01\n" +
+	"\fGetUserToken\x12\x1c.user.v1.GetUserTokenRequest\x1a\x1d.user.v1.GetUserTokenResponse\x12E\n" +
+	"\n" +
+	"VerifyUser\x12\x1a.user.v1.VerifyUserRequest\x1a\x1b.user.v1.VerifyUserResponseB\x8c\x01\n" +
 	"\vcom.user.v1B\bApiProtoP\x01Z6github.com/sazajun1390/user/pkg/gen/buf/user/v1;userv1\xa2\x02\x03UXX\xaa\x02\aUser.V1\xca\x02\aUser\\V1\xe2\x02\x13User\\V1\\GPBMetadata\xea\x02\bUser::V1b\x06proto3"
 
 var file_user_v1_api_proto_goTypes = []any{
 	(*CreateUserRequest)(nil),    // 0: user.v1.CreateUserRequest
 	(*GetUserTokenRequest)(nil),  // 1: user.v1.GetUserTokenRequest
-	(*CreateUserResponse)(nil),   // 2: user.v1.CreateUserResponse
-	(*GetUserTokenResponse)(nil), // 3: user.v1.GetUserTokenResponse
+	(*VerifyUserRequest)(nil),    // 2: user.v1.VerifyUserRequest
+	(*CreateUserResponse)(nil),   // 3: user.v1.CreateUserResponse
+	(*GetUserTokenResponse)(nil), // 4: user.v1.GetUserTokenResponse
+	(*VerifyUserResponse)(nil),   // 5: user.v1.VerifyUserResponse
 }
 var file_user_v1_api_proto_depIdxs = []int32{
 	0, // 0: user.v1.UserService.CreateUser:input_type -> user.v1.CreateUserRequest
 	1, // 1: user.v1.UserService.GetUserToken:input_type -> user.v1.GetUserTokenRequest
-	2, // 2: user.v1.UserService.CreateUser:output_type -> user.v1.CreateUserResponse
-	3, // 3: user.v1.UserService.GetUserToken:output_type -> user.v1.GetUserTokenResponse
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
+	2, // 2: user.v1.UserService.VerifyUser:input_type -> user.v1.VerifyUserRequest
+	3, // 3: user.v1.UserService.CreateUser:output_type -> user.v1.CreateUserResponse
+	4, // 4: user.v1.UserService.GetUserToken:output_type -> user.v1.GetUserTokenResponse
+	5, // 5: user.v1.UserService.VerifyUser:output_type -> user.v1.VerifyUserResponse
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name

@@ -4,6 +4,7 @@ package user.v1;
 
 import "user/v1/user.proto";
 import "buf/validate/validate.proto";
+import "google.acl.v1";
 
 
 message CreateUserRequest {

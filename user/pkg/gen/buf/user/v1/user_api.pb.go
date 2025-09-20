@@ -89,7 +89,7 @@ func (x *CreateUserRequest) GetUserTel() string {
 // レスポンステスト用
 type CreateUserResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// UserTokenResorce
+	// Userリソース
 	User          *User `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -199,8 +199,8 @@ func (x *CreateUserProfileRequest) GetUserTel() string {
 // レスポンステスト用
 type CreateUserProfileResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// UserTokenResorce
-	PageRooting   string `protobuf:"bytes,1,opt,name=page_rooting,json=pageRooting,proto3" json:"page_rooting,omitempty"`
+	// Userリソース
+	User          *User `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -235,17 +235,20 @@ func (*CreateUserProfileResponse) Descriptor() ([]byte, []int) {
 	return file_user_v1_user_api_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *CreateUserProfileResponse) GetPageRooting() string {
+func (x *CreateUserProfileResponse) GetUser() *User {
 	if x != nil {
-		return x.PageRooting
+		return x.User
 	}
-	return ""
+	return nil
 }
 
 // SingUpの認証用
 type VerifyUserRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	VerifyMessage string                 `protobuf:"bytes,1,opt,name=verify_message,json=verifyMessage,proto3" json:"verify_message,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// UserリソースID
+	UserResourceId string `protobuf:"bytes,1,opt,name=user_resource_id,json=userResourceId,proto3" json:"user_resource_id,omitempty"`
+	// 認証用メッセージ
+	VerifyMessage string `protobuf:"bytes,2,opt,name=verify_message,json=verifyMessage,proto3" json:"verify_message,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -280,6 +283,13 @@ func (*VerifyUserRequest) Descriptor() ([]byte, []int) {
 	return file_user_v1_user_api_proto_rawDescGZIP(), []int{4}
 }
 
+func (x *VerifyUserRequest) GetUserResourceId() string {
+	if x != nil {
+		return x.UserResourceId
+	}
+	return ""
+}
+
 func (x *VerifyUserRequest) GetVerifyMessage() string {
 	if x != nil {
 		return x.VerifyMessage
@@ -289,8 +299,11 @@ func (x *VerifyUserRequest) GetVerifyMessage() string {
 
 // 成功時にJWTを返す
 type VerifyUserResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserToken     *UserToken             `protobuf:"bytes,1,opt,name=user_token,json=userToken,proto3" json:"user_token,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Userリソース
+	User *User `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	// UserToken
+	UserToken     *UserToken `protobuf:"bytes,2,opt,name=user_token,json=userToken,proto3" json:"user_token,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -323,6 +336,13 @@ func (x *VerifyUserResponse) ProtoReflect() protoreflect.Message {
 // Deprecated: Use VerifyUserResponse.ProtoReflect.Descriptor instead.
 func (*VerifyUserResponse) Descriptor() ([]byte, []int) {
 	return file_user_v1_user_api_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *VerifyUserResponse) GetUser() *User {
+	if x != nil {
+		return x.User
+	}
+	return nil
 }
 
 func (x *VerifyUserResponse) GetUserToken() *UserToken {
@@ -453,12 +473,14 @@ const file_user_v1_user_api_proto_rawDesc = "" +
 	"\tuser_name\x18\x02 \x01(\tR\buserName\x124\n" +
 	"\buser_tel\x18\x03 \x01(\tB\x19\xbaH\x16r\x142\x12^\\+81[-0-9]{9,13}$R\auserTel\">\n" +
 	"\x19CreateUserProfileResponse\x12!\n" +
-	"\fpage_rooting\x18\x01 \x01(\tR\vpageRooting\":\n" +
-	"\x11VerifyUserRequest\x12%\n" +
-	"\x0everify_message\x18\x01 \x01(\tR\rverifyMessage\"G\n" +
-	"\x12VerifyUserResponse\x121\n" +
+	"\x04user\x18\x01 \x01(\v2\r.user.v1.UserR\x04user\"d\n" +
+	"\x11VerifyUserRequest\x12(\n" +
+	"\x10user_resource_id\x18\x01 \x01(\tR\x0euserResourceId\x12%\n" +
+	"\x0everify_message\x18\x02 \x01(\tR\rverifyMessage\"j\n" +
+	"\x12VerifyUserResponse\x12!\n" +
+	"\x04user\x18\x01 \x01(\v2\r.user.v1.UserR\x04user\x121\n" +
 	"\n" +
-	"user_token\x18\x01 \x01(\v2\x12.user.v1.UserTokenR\tuserToken\"d\n" +
+	"user_token\x18\x02 \x01(\v2\x12.user.v1.UserTokenR\tuserToken\"d\n" +
 	"\x13GetUserTokenRequest\x12&\n" +
 	"\n" +
 	"user_email\x18\x01 \x01(\tB\a\xbaH\x04r\x02`\x01R\tuserEmail\x12%\n" +
@@ -495,13 +517,15 @@ var file_user_v1_user_api_proto_goTypes = []any{
 }
 var file_user_v1_user_api_proto_depIdxs = []int32{
 	8, // 0: user.v1.CreateUserResponse.user:type_name -> user.v1.User
-	9, // 1: user.v1.VerifyUserResponse.user_token:type_name -> user.v1.UserToken
-	9, // 2: user.v1.GetUserTokenResponse.user_token:type_name -> user.v1.UserToken
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	8, // 1: user.v1.CreateUserProfileResponse.user:type_name -> user.v1.User
+	8, // 2: user.v1.VerifyUserResponse.user:type_name -> user.v1.User
+	9, // 3: user.v1.VerifyUserResponse.user_token:type_name -> user.v1.UserToken
+	9, // 4: user.v1.GetUserTokenResponse.user_token:type_name -> user.v1.UserToken
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_user_v1_user_api_proto_init() }
