@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/sazajun1390/backendservice/user/pkg/gen/user"
+	"github.com/sazajun1390/backendservice/user/pkg/gen/sqlcmodel"
 	"github.com/sazajun1390/backendservice/user/pkg/models/userstatus"
 	"github.com/uptrace/bun"
 )
@@ -15,7 +15,7 @@ func RevivalUser(
 	email string,
 	now time.Time,
 ) error {
-	var userProfile user.UserProfiles
+	var userProfile sqlcmodel.UserProfiles
 	query := GetDeletedUserQuery(tx, email)
 	err := query.Model(&userProfile).Scan(ctx)
 	if err != nil {

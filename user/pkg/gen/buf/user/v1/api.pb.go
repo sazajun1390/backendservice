@@ -30,8 +30,8 @@ const file_user_v1_api_proto_rawDesc = "" +
 	"CreateUser\x12\x1a.user.v1.CreateUserRequest\x1a\x1b.user.v1.CreateUserResponse\x12<\n" +
 	"\aGetUser\x12\x17.user.v1.GetUserRequest\x1a\x18.user.v1.GetUserResponse\x12E\n" +
 	"\n" +
-	"VerifyUser\x12\x1a.user.v1.VerifyUserRequest\x1a\x1b.user.v1.VerifyUserResponseB\x8c\x01\n" +
-	"\vcom.user.v1B\bApiProtoP\x01Z6github.com/sazajun1390/user/pkg/gen/buf/user/v1;userv1\xa2\x02\x03UXX\xaa\x02\aUser.V1\xca\x02\aUser\\V1\xe2\x02\x13User\\V1\\GPBMetadata\xea\x02\bUser::V1b\x06proto3"
+	"VerifyUser\x12\x1a.user.v1.VerifyUserRequest\x1a\x1b.user.v1.VerifyUserResponseB\x9b\x01\n" +
+	"\vcom.user.v1B\bApiProtoP\x01ZEgithub.com/sazajun1390/backendservice/user/pkg/gen/buf/user/v1;userv1\xa2\x02\x03UXX\xaa\x02\aUser.V1\xca\x02\aUser\\V1\xe2\x02\x13User\\V1\\GPBMetadata\xea\x02\bUser::V1b\x06proto3"
 
 var file_user_v1_api_proto_goTypes = []any{
 	(*CreateUserRequest)(nil),  // 0: user.v1.CreateUserRequest

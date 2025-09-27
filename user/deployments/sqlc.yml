@@ -33,8 +33,8 @@ sql:
     queries: "./queries/query.sql"
     gen:
       go:
-        package: "user"
-        out: "../pkg/gen/user"
+        package: "sqlcmodel"
+        out: "../pkg/gen/sqlcmodel"
         emit_json_tags: true
         emit_db_tags: true
         emit_prepared_queries: false

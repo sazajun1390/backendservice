@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/sazajun1390/backendservice/user/pkg/gen/user"
+	"github.com/sazajun1390/backendservice/user/pkg/gen/sqlcmodel"
 	"github.com/uptrace/bun"
 )
 
@@ -14,7 +14,7 @@ func RevivalUserStatus(
 	tx bun.Tx,
 	userID int64,
 	now time.Time,
-) (*user.UserActives, error) {
+) (*sqlcmodel.UserActives, error) {
 	err := deleteUserDelete(ctx, tx, userID)
 	// 一件も出ない場合にはsql.ErrNoRowsが返るはず
 	if err != nil {
@@ -33,7 +33,7 @@ func PargeUser(
 	userID int64,
 	now time.Time,
 ) error {
-	exists, err := tx.NewSelect().Model((*user.UserDeletes)(nil)).Where("user_id = ?", userID).Exists(ctx)
+	exists, err := tx.NewSelect().Model((*sqlcmodel.UserDeletes)(nil)).Where("user_id = ?", userID).Exists(ctx)
 	if err != nil {
 		return err
 	}
@@ -54,7 +54,7 @@ func ActivateUserStatus(
 	tx bun.Tx,
 	userID int64,
 	now time.Time,
-) (*user.UserActives, error) {
+) (*sqlcmodel.UserActives, error) {
 	err := deleteUserProvision(ctx, tx, userID)
 	// 一件も出ない場合にはsql.ErrNoRowsが返るはず
 	if err != nil {
@@ -73,7 +73,7 @@ func WithdrawalUserStatus(
 	userID int64,
 	now time.Time,
 	purgedExpiresAt time.Time,
-) (*user.UserDeletes, error) {
+) (*sqlcmodel.UserDeletes, error) {
 	err := deleteUserActive(ctx, tx, userID)
 	// 一件も出ない場合にはsql.ErrNoRowsが返るはず
 	if err != nil {

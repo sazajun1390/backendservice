@@ -6,7 +6,7 @@ import (
 	"connectrpc.com/connect"
 	"github.com/cockroachdb/errors"
 	userv1 "github.com/sazajun1390/backendservice/user/pkg/gen/buf/user/v1"
-	queries "github.com/sazajun1390/backendservice/user/pkg/gen/user"
+	queries "github.com/sazajun1390/backendservice/user/pkg/gen/sqlcmodel"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

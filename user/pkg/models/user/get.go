@@ -3,7 +3,7 @@ package user
 import (
 	"context"
 
-	"github.com/sazajun1390/backendservice/user/pkg/gen/user"
+	"github.com/sazajun1390/backendservice/user/pkg/gen/sqlcmodel"
 	"github.com/uptrace/bun"
 )
 
@@ -11,8 +11,8 @@ func GetAliveUser(
 	ctx context.Context,
 	db *bun.DB,
 	email string,
-) (*user.UserProfiles, error) {
-	var userProfile user.UserProfiles
+) (*sqlcmodel.UserProfiles, error) {
+	var userProfile sqlcmodel.UserProfiles
 
 	query := GetUserQuery(db, email)
 	err := query.Model(&userProfile).Scan(ctx)

@@ -486,8 +486,8 @@ const file_user_v1_user_api_proto_rawDesc = "" +
 	"user_email\x18\x01 \x01(\tB\a\xbaH\x04r\x02`\x01R\tuserEmail\x12%\n" +
 	"\bpassword\x18\x02 \x01(\tB\t\xbaH\x06r\x04\x10\x01\x18\x14R\bpassword\"4\n" +
 	"\x0fGetUserResponse\x12!\n" +
-	"\x04user\x18\x01 \x01(\v2\r.user.v1.UserR\x04userB\x90\x01\n" +
-	"\vcom.user.v1B\fUserApiProtoP\x01Z6github.com/sazajun1390/user/pkg/gen/buf/user/v1;userv1\xa2\x02\x03UXX\xaa\x02\aUser.V1\xca\x02\aUser\\V1\xe2\x02\x13User\\V1\\GPBMetadata\xea\x02\bUser::V1b\x06proto3"
+	"\x04user\x18\x01 \x01(\v2\r.user.v1.UserR\x04userB\x9f\x01\n" +
+	"\vcom.user.v1B\fUserApiProtoP\x01ZEgithub.com/sazajun1390/backendservice/user/pkg/gen/buf/user/v1;userv1\xa2\x02\x03UXX\xaa\x02\aUser.V1\xca\x02\aUser\\V1\xe2\x02\x13User\\V1\\GPBMetadata\xea\x02\bUser::V1b\x06proto3"
 
 var (
 	file_user_v1_user_api_proto_rawDescOnce sync.Once

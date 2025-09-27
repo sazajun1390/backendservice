@@ -2,11 +2,12 @@
 // versions:
 //   sqlc v1.30.0
 
-package user
+package sqlcmodel
 
 import (
 	"context"
 	"database/sql"
+	"github.com/uptrace/bun"
 )
 
 type DBTX interface {
@@ -21,7 +22,8 @@ func New(db DBTX) *Queries {
 }
 
 type Queries struct {
-	db DBTX
+	bun.BaseModel
+	db	DBTX	`bun:"db"`
 }
 
 func (q *Queries) WithTx(tx *sql.Tx) *Queries {

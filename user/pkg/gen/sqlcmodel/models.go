@@ -2,12 +2,11 @@
 // versions:
 //   sqlc v1.30.0
 
-package user
+package sqlcmodel
 
 import (
 	"database/sql"
 	"time"
-
 	"github.com/uptrace/bun"
 )
 

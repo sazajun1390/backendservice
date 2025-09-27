@@ -204,8 +204,8 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"\v_deleted_atB\x14\n" +
 	"\x12_purged_expires_at\"!\n" +
 	"\tUserToken\x12\x14\n" +
-	"\x05token\x18\x01 \x01(\tR\x05tokenB\x8d\x01\n" +
-	"\vcom.user.v1B\tUserProtoP\x01Z6github.com/sazajun1390/user/pkg/gen/buf/user/v1;userv1\xa2\x02\x03UXX\xaa\x02\aUser.V1\xca\x02\aUser\\V1\xe2\x02\x13User\\V1\\GPBMetadata\xea\x02\bUser::V1b\x06proto3"
+	"\x05token\x18\x01 \x01(\tR\x05tokenB\x9c\x01\n" +
+	"\vcom.user.v1B\tUserProtoP\x01ZEgithub.com/sazajun1390/backendservice/user/pkg/gen/buf/user/v1;userv1\xa2\x02\x03UXX\xaa\x02\aUser.V1\xca\x02\aUser\\V1\xe2\x02\x13User\\V1\\GPBMetadata\xea\x02\bUser::V1b\x06proto3"
 
 var (
 	file_user_v1_user_proto_rawDescOnce sync.Once

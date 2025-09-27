@@ -10,7 +10,7 @@ managed:
       module: buf.build/bufbuild/protovalidate
   override:
     - file_option: go_package_prefix
-      value: github.com/sazajun1390/user/pkg/gen/buf/
+      value: github.com/sazajun1390/backendservice/user/pkg/gen/buf/
 plugins:
   - local: protoc-gen-go
     out: ../user/pkg/gen/buf/

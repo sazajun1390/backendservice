@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/oklog/ulid/v2"
-	"github.com/sazajun1390/backendservice/user/pkg/gen/user"
+	sqlcmodel "github.com/sazajun1390/backendservice/user/pkg/gen/sqlcmodel"
 	"github.com/uptrace/bun"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -17,11 +17,11 @@ func CreateUser(
 	password string,
 	now time.Time,
 ) (
-	*user.Users,
-	*user.UserProfiles,
+	*sqlcmodel.Users,
+	*sqlcmodel.UserProfiles,
 	error,
 ) {
-	userMaster := &user.Users{
+	userMaster := &sqlcmodel.Users{
 		CreatedAt: now,
 	}
 	_, err := idb.NewInsert().Model(userMaster).Exec(ctx)
@@ -29,7 +29,7 @@ func CreateUser(
 		return nil, nil, err
 	}
 
-	userprovision := &user.UserProvision{
+	userprovision := &sqlcmodel.UserProvision{
 		UserID:    userMaster.ID,
 		CreatedAt: now,
 	}
@@ -43,7 +43,7 @@ func CreateUser(
 		return nil, nil, err
 	}
 
-	userProfile := &user.UserProfiles{
+	userProfile := &sqlcmodel.UserProfiles{
 		UserID:     userMaster.ID,
 		ResourceID: ulid.Make().String(),
 		Email:      email,

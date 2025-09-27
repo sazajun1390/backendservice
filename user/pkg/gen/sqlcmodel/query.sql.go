@@ -3,12 +3,14 @@
 //   sqlc v1.30.0
 // source: query.sql
 
-package user
+package sqlcmodel
 
 import (
 	"context"
 	"database/sql"
 	"time"
+
+	"github.com/uptrace/bun"
 )
 
 const getActiveUser = `-- name: GetActiveUser :many
@@ -16,20 +18,21 @@ select  user_profiles.user_id, user_profiles.user_multi_id, user_profiles.resour
 `
 
 type GetActiveUserRow struct {
-	UserID          int64          `db:"user_id" json:"user_id"`
-	UserMultiID     string         `db:"user_multi_id" json:"user_multi_id"`
-	ResourceID      string         `db:"resource_id" json:"resource_id"`
-	Email           string         `db:"email" json:"email"`
-	Password        string         `db:"password" json:"password"`
-	PostCode        string         `db:"post_code" json:"post_code"`
-	Address         string         `db:"address" json:"address"`
-	AddressKana     string         `db:"address_kana" json:"address_kana"`
-	Tel             sql.NullString `db:"tel" json:"tel"`
-	CreatedAt       time.Time      `db:"created_at" json:"created_at"`
-	UpdatedAt       time.Time      `db:"updated_at" json:"updated_at"`
-	DeletedAt       sql.NullTime   `db:"deleted_at" json:"deleted_at"`
-	PurgedExpiresAt sql.NullTime   `db:"purged_expires_at" json:"purged_expires_at"`
-	ActivatedAt     time.Time      `db:"activated_at" json:"activated_at"`
+	bun.BaseModel
+	UserID          int64          `db:"user_id" json:"user_id" bun:"user_id"`
+	UserMultiID     string         `db:"user_multi_id" json:"user_multi_id" bun:"user_multi_id"`
+	ResourceID      string         `db:"resource_id" json:"resource_id" bun:"resource_id"`
+	Email           string         `db:"email" json:"email" bun:"email"`
+	Password        string         `db:"password" json:"password" bun:"password"`
+	PostCode        string         `db:"post_code" json:"post_code" bun:"post_code"`
+	Address         string         `db:"address" json:"address" bun:"address"`
+	AddressKana     string         `db:"address_kana" json:"address_kana" bun:"address_kana"`
+	Tel             sql.NullString `db:"tel" json:"tel" bun:"tel"`
+	CreatedAt       time.Time      `db:"created_at" json:"created_at" bun:"created_at"`
+	UpdatedAt       time.Time      `db:"updated_at" json:"updated_at" bun:"updated_at"`
+	DeletedAt       bun.NullTime   `db:"deleted_at" json:"deleted_at" bun:"deleted_at"`
+	PurgedExpiresAt bun.NullTime   `db:"purged_expires_at" json:"purged_expires_at" bun:"purged_expires_at"`
+	ActivatedAt     time.Time      `db:"activated_at" json:"activated_at" bun:"activated_at"`
 }
 
 func (q *Queries) GetActiveUser(ctx context.Context) ([]GetActiveUserRow, error) {
@@ -75,21 +78,22 @@ select user_profiles.user_id, user_profiles.user_multi_id, user_profiles.resourc
 `
 
 type GetDeletedUserRow struct {
-	UserID                int64          `db:"user_id" json:"user_id"`
-	UserMultiID           string         `db:"user_multi_id" json:"user_multi_id"`
-	ResourceID            string         `db:"resource_id" json:"resource_id"`
-	Email                 string         `db:"email" json:"email"`
-	Password              string         `db:"password" json:"password"`
-	PostCode              string         `db:"post_code" json:"post_code"`
-	Address               string         `db:"address" json:"address"`
-	AddressKana           string         `db:"address_kana" json:"address_kana"`
-	Tel                   sql.NullString `db:"tel" json:"tel"`
-	CreatedAt             time.Time      `db:"created_at" json:"created_at"`
-	UpdatedAt             time.Time      `db:"updated_at" json:"updated_at"`
-	DeletedAt             sql.NullTime   `db:"deleted_at" json:"deleted_at"`
-	PurgedExpiresAt       sql.NullTime   `db:"purged_expires_at" json:"purged_expires_at"`
-	DeleteCreatedAt       time.Time      `db:"delete_created_at" json:"delete_created_at"`
-	DeletePurgedExpiresAt sql.NullTime   `db:"delete_purged_expires_at" json:"delete_purged_expires_at"`
+	bun.BaseModel
+	UserID                int64          `db:"user_id" json:"user_id" bun:"user_i_d"`
+	UserMultiID           string         `db:"user_multi_id" json:"user_multi_id" bun:"user_multi_i_d"`
+	ResourceID            string         `db:"resource_id" json:"resource_id" bun:"resource_i_d"`
+	Email                 string         `db:"email" json:"email" bun:"email"`
+	Password              string         `db:"password" json:"password" bun:"password"`
+	PostCode              string         `db:"post_code" json:"post_code" bun:"post_code"`
+	Address               string         `db:"address" json:"address" bun:"address"`
+	AddressKana           string         `db:"address_kana" json:"address_kana" bun:"address_kana"`
+	Tel                   sql.NullString `db:"tel" json:"tel" bun:"tel"`
+	CreatedAt             time.Time      `db:"created_at" json:"created_at" bun:"created_at"`
+	UpdatedAt             time.Time      `db:"updated_at" json:"updated_at" bun:"updated_at"`
+	DeletedAt             bun.NullTime   `db:"deleted_at" json:"deleted_at" bun:"deleted_at"`
+	PurgedExpiresAt       bun.NullTime   `db:"purged_expires_at" json:"purged_expires_at" bun:"purged_expires_at"`
+	DeleteCreatedAt       time.Time      `db:"delete_created_at" json:"delete_created_at" bun:"delete_created_at"`
+	DeletePurgedExpiresAt bun.NullTime   `db:"delete_purged_expires_at" json:"delete_purged_expires_at" bun:"delete_purged_expires_at"`
 }
 
 func (q *Queries) GetDeletedUser(ctx context.Context) ([]GetDeletedUserRow, error) {
@@ -136,20 +140,21 @@ select user_profiles.user_id, user_profiles.user_multi_id, user_profiles.resourc
 `
 
 type GetProvisionUserRow struct {
-	UserID             int64          `db:"user_id" json:"user_id"`
-	UserMultiID        string         `db:"user_multi_id" json:"user_multi_id"`
-	ResourceID         string         `db:"resource_id" json:"resource_id"`
-	Email              string         `db:"email" json:"email"`
-	Password           string         `db:"password" json:"password"`
-	PostCode           string         `db:"post_code" json:"post_code"`
-	Address            string         `db:"address" json:"address"`
-	AddressKana        string         `db:"address_kana" json:"address_kana"`
-	Tel                sql.NullString `db:"tel" json:"tel"`
-	CreatedAt          time.Time      `db:"created_at" json:"created_at"`
-	UpdatedAt          time.Time      `db:"updated_at" json:"updated_at"`
-	DeletedAt          sql.NullTime   `db:"deleted_at" json:"deleted_at"`
-	PurgedExpiresAt    sql.NullTime   `db:"purged_expires_at" json:"purged_expires_at"`
-	ProvisionCreatedAt time.Time      `db:"provision_created_at" json:"provision_created_at"`
+	bun.BaseModel
+	UserID             int64          `db:"user_id" json:"user_id" bun:"user_i_d"`
+	UserMultiID        string         `db:"user_multi_id" json:"user_multi_id" bun:"user_multi_i_d"`
+	ResourceID         string         `db:"resource_id" json:"resource_id" bun:"resource_i_d"`
+	Email              string         `db:"email" json:"email" bun:"email"`
+	Password           string         `db:"password" json:"password" bun:"password"`
+	PostCode           string         `db:"post_code" json:"post_code" bun:"post_code"`
+	Address            string         `db:"address" json:"address" bun:"address"`
+	AddressKana        string         `db:"address_kana" json:"address_kana" bun:"address_kana"`
+	Tel                sql.NullString `db:"tel" json:"tel" bun:"tel"`
+	CreatedAt          time.Time      `db:"created_at" json:"created_at" bun:"created_at"`
+	UpdatedAt          time.Time      `db:"updated_at" json:"updated_at" bun:"updated_at"`
+	DeletedAt          bun.NullTime   `db:"deleted_at" json:"deleted_at" bun:"deleted_at"`
+	PurgedExpiresAt    bun.NullTime   `db:"purged_expires_at" json:"purged_expires_at" bun:"purged_expires_at"`
+	ProvisionCreatedAt time.Time      `db:"provision_created_at" json:"provision_created_at" bun:"provision_created_at"`
 }
 
 func (q *Queries) GetProvisionUser(ctx context.Context) ([]GetProvisionUserRow, error) {

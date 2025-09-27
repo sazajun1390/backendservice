@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/sazajun1390/backendservice/user/pkg/gen/user"
+	"github.com/sazajun1390/backendservice/user/pkg/gen/sqlcmodel"
 	"github.com/uptrace/bun"
 )
 
@@ -13,8 +13,8 @@ func CreateProvisionalUser(
 	idb bun.IDB,
 	userID int64,
 	now time.Time,
-) (*user.UserProvision, error) {
-	userProvision := &user.UserProvision{
+) (*sqlcmodel.UserProvision, error) {
+	userProvision := &sqlcmodel.UserProvision{
 		UserID:    userID,
 		CreatedAt: now,
 	}
@@ -30,8 +30,8 @@ func createUserActive(
 	idb bun.IDB,
 	userID int64,
 	now time.Time,
-) (*user.UserActives, error) {
-	userActive := &user.UserActives{
+) (*sqlcmodel.UserActives, error) {
+	userActive := &sqlcmodel.UserActives{
 		UserID:    userID,
 		CreatedAt: now,
 	}
@@ -48,8 +48,8 @@ func createUserDelete(
 	userID int64,
 	now time.Time,
 	expiresAt time.Time,
-) (*user.UserDeletes, error) {
-	userDelete := &user.UserDeletes{
+) (*sqlcmodel.UserDeletes, error) {
+	userDelete := &sqlcmodel.UserDeletes{
 		UserID:    userID,
 		CreatedAt: now,
 		PurgedExpiresAt: bun.NullTime{
