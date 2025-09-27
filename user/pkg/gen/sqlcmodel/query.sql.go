@@ -9,30 +9,38 @@ import (
 	"context"
 	"database/sql"
 	"time"
-
 	"github.com/uptrace/bun"
 )
 
 const getActiveUser = `-- name: GetActiveUser :many
-select  user_profiles.user_id, user_profiles.user_multi_id, user_profiles.resource_id, user_profiles.email, user_profiles.password, user_profiles.post_code, user_profiles.address, user_profiles.address_kana, user_profiles.tel, user_profiles.created_at, user_profiles.updated_at, user_profiles.deleted_at, user_profiles.purged_expires_at, user_actives.created_at as activated_at from user_profiles inner join users on user_profiles.user_id = users.id right join user_actives on users.id = user_actives.user_id right join user_provision on users.id = user_provision.user_id right join user_deletes on users.id = user_deletes.user_id
+SELECT
+    u.id,
+    p.user_id, p.user_multi_id, p.resource_id, p.email, p.password, p.post_code, p.address, p.address_kana, p.tel, p.created_at, p.updated_at, p.deleted_at, p.purged_expires_at,
+    a.created_at AS activated_at
+FROM user_actives a
+JOIN users u ON a.user_id = u.id
+LEFT JOIN user_profiles p ON u.id = p.user_id
+LEFT JOIN user_provision pr ON u.id = pr.user_id
+LEFT JOIN user_deletes d ON u.id = d.user_id
 `
 
 type GetActiveUserRow struct {
 	bun.BaseModel
-	UserID          int64          `db:"user_id" json:"user_id" bun:"user_id"`
-	UserMultiID     string         `db:"user_multi_id" json:"user_multi_id" bun:"user_multi_id"`
-	ResourceID      string         `db:"resource_id" json:"resource_id" bun:"resource_id"`
-	Email           string         `db:"email" json:"email" bun:"email"`
-	Password        string         `db:"password" json:"password" bun:"password"`
-	PostCode        string         `db:"post_code" json:"post_code" bun:"post_code"`
-	Address         string         `db:"address" json:"address" bun:"address"`
-	AddressKana     string         `db:"address_kana" json:"address_kana" bun:"address_kana"`
-	Tel             sql.NullString `db:"tel" json:"tel" bun:"tel"`
-	CreatedAt       time.Time      `db:"created_at" json:"created_at" bun:"created_at"`
-	UpdatedAt       time.Time      `db:"updated_at" json:"updated_at" bun:"updated_at"`
-	DeletedAt       bun.NullTime   `db:"deleted_at" json:"deleted_at" bun:"deleted_at"`
-	PurgedExpiresAt bun.NullTime   `db:"purged_expires_at" json:"purged_expires_at" bun:"purged_expires_at"`
-	ActivatedAt     time.Time      `db:"activated_at" json:"activated_at" bun:"activated_at"`
+	ID		int64		`db:"id" json:"id" bun:"i_d"`
+	UserID		sql.NullInt64	`db:"user_id" json:"user_id" bun:"user_i_d"`
+	UserMultiID	sql.NullString	`db:"user_multi_id" json:"user_multi_id" bun:"user_multi_i_d"`
+	ResourceID	sql.NullString	`db:"resource_id" json:"resource_id" bun:"resource_i_d"`
+	Email		sql.NullString	`db:"email" json:"email" bun:"email"`
+	Password	sql.NullString	`db:"password" json:"password" bun:"password"`
+	PostCode	sql.NullString	`db:"post_code" json:"post_code" bun:"post_code"`
+	Address		sql.NullString	`db:"address" json:"address" bun:"address"`
+	AddressKana	sql.NullString	`db:"address_kana" json:"address_kana" bun:"address_kana"`
+	Tel		sql.NullString	`db:"tel" json:"tel" bun:"tel"`
+	CreatedAt	bun.NullTime	`db:"created_at" json:"created_at" bun:"created_at"`
+	UpdatedAt	bun.NullTime	`db:"updated_at" json:"updated_at" bun:"updated_at"`
+	DeletedAt	bun.NullTime	`db:"deleted_at" json:"deleted_at" bun:"deleted_at"`
+	PurgedExpiresAt	bun.NullTime	`db:"purged_expires_at" json:"purged_expires_at" bun:"purged_expires_at"`
+	ActivatedAt	time.Time	`db:"activated_at" json:"activated_at" bun:"activated_at"`
 }
 
 func (q *Queries) GetActiveUser(ctx context.Context) ([]GetActiveUserRow, error) {
@@ -45,6 +53,7 @@ func (q *Queries) GetActiveUser(ctx context.Context) ([]GetActiveUserRow, error)
 	for rows.Next() {
 		var i GetActiveUserRow
 		if err := rows.Scan(
+			&i.ID,
 			&i.UserID,
 			&i.UserMultiID,
 			&i.ResourceID,
@@ -74,26 +83,36 @@ func (q *Queries) GetActiveUser(ctx context.Context) ([]GetActiveUserRow, error)
 }
 
 const getDeletedUser = `-- name: GetDeletedUser :many
-select user_profiles.user_id, user_profiles.user_multi_id, user_profiles.resource_id, user_profiles.email, user_profiles.password, user_profiles.post_code, user_profiles.address, user_profiles.address_kana, user_profiles.tel, user_profiles.created_at, user_profiles.updated_at, user_profiles.deleted_at, user_profiles.purged_expires_at, user_deletes.created_at as delete_created_at, user_deletes.purged_expires_at as delete_purged_expires_at from user_profiles inner join users on user_profiles.user_id = users.id right join user_actives on users.id = user_actives.user_id right join user_provision on users.id = user_provision.user_id right join user_deletes on users.id = user_deletes.user_id
+SELECT
+    u.id,
+    p.user_id, p.user_multi_id, p.resource_id, p.email, p.password, p.post_code, p.address, p.address_kana, p.tel, p.created_at, p.updated_at, p.deleted_at, p.purged_expires_at,
+    d.created_at AS delete_created_at,
+    d.purged_expires_at AS delete_purged_expires_at
+FROM user_deletes d
+JOIN users u ON d.user_id = u.id
+LEFT JOIN user_profiles p ON u.id = p.user_id
+LEFT JOIN user_actives a ON u.id = a.user_id
+LEFT JOIN user_provision pr ON u.id = pr.user_id
 `
 
 type GetDeletedUserRow struct {
 	bun.BaseModel
-	UserID                int64          `db:"user_id" json:"user_id" bun:"user_i_d"`
-	UserMultiID           string         `db:"user_multi_id" json:"user_multi_id" bun:"user_multi_i_d"`
-	ResourceID            string         `db:"resource_id" json:"resource_id" bun:"resource_i_d"`
-	Email                 string         `db:"email" json:"email" bun:"email"`
-	Password              string         `db:"password" json:"password" bun:"password"`
-	PostCode              string         `db:"post_code" json:"post_code" bun:"post_code"`
-	Address               string         `db:"address" json:"address" bun:"address"`
-	AddressKana           string         `db:"address_kana" json:"address_kana" bun:"address_kana"`
-	Tel                   sql.NullString `db:"tel" json:"tel" bun:"tel"`
-	CreatedAt             time.Time      `db:"created_at" json:"created_at" bun:"created_at"`
-	UpdatedAt             time.Time      `db:"updated_at" json:"updated_at" bun:"updated_at"`
-	DeletedAt             bun.NullTime   `db:"deleted_at" json:"deleted_at" bun:"deleted_at"`
-	PurgedExpiresAt       bun.NullTime   `db:"purged_expires_at" json:"purged_expires_at" bun:"purged_expires_at"`
-	DeleteCreatedAt       time.Time      `db:"delete_created_at" json:"delete_created_at" bun:"delete_created_at"`
-	DeletePurgedExpiresAt bun.NullTime   `db:"delete_purged_expires_at" json:"delete_purged_expires_at" bun:"delete_purged_expires_at"`
+	ID			int64		`db:"id" json:"id" bun:"i_d"`
+	UserID			sql.NullInt64	`db:"user_id" json:"user_id" bun:"user_i_d"`
+	UserMultiID		sql.NullString	`db:"user_multi_id" json:"user_multi_id" bun:"user_multi_i_d"`
+	ResourceID		sql.NullString	`db:"resource_id" json:"resource_id" bun:"resource_i_d"`
+	Email			sql.NullString	`db:"email" json:"email" bun:"email"`
+	Password		sql.NullString	`db:"password" json:"password" bun:"password"`
+	PostCode		sql.NullString	`db:"post_code" json:"post_code" bun:"post_code"`
+	Address			sql.NullString	`db:"address" json:"address" bun:"address"`
+	AddressKana		sql.NullString	`db:"address_kana" json:"address_kana" bun:"address_kana"`
+	Tel			sql.NullString	`db:"tel" json:"tel" bun:"tel"`
+	CreatedAt		bun.NullTime	`db:"created_at" json:"created_at" bun:"created_at"`
+	UpdatedAt		bun.NullTime	`db:"updated_at" json:"updated_at" bun:"updated_at"`
+	DeletedAt		bun.NullTime	`db:"deleted_at" json:"deleted_at" bun:"deleted_at"`
+	PurgedExpiresAt		bun.NullTime	`db:"purged_expires_at" json:"purged_expires_at" bun:"purged_expires_at"`
+	DeleteCreatedAt		time.Time	`db:"delete_created_at" json:"delete_created_at" bun:"delete_created_at"`
+	DeletePurgedExpiresAt	bun.NullTime	`db:"delete_purged_expires_at" json:"delete_purged_expires_at" bun:"delete_purged_expires_at"`
 }
 
 func (q *Queries) GetDeletedUser(ctx context.Context) ([]GetDeletedUserRow, error) {
@@ -106,6 +125,7 @@ func (q *Queries) GetDeletedUser(ctx context.Context) ([]GetDeletedUserRow, erro
 	for rows.Next() {
 		var i GetDeletedUserRow
 		if err := rows.Scan(
+			&i.ID,
 			&i.UserID,
 			&i.UserMultiID,
 			&i.ResourceID,
@@ -136,25 +156,36 @@ func (q *Queries) GetDeletedUser(ctx context.Context) ([]GetDeletedUserRow, erro
 }
 
 const getProvisionUser = `-- name: GetProvisionUser :many
-select user_profiles.user_id, user_profiles.user_multi_id, user_profiles.resource_id, user_profiles.email, user_profiles.password, user_profiles.post_code, user_profiles.address, user_profiles.address_kana, user_profiles.tel, user_profiles.created_at, user_profiles.updated_at, user_profiles.deleted_at, user_profiles.purged_expires_at, user_provision.created_at as provision_created_at from user_profiles inner join users on user_profiles.user_id = users.id right join user_actives on users.id = user_actives.user_id right join user_provision on users.id = user_provision.user_id right join user_deletes on users.id = user_deletes.user_id
+SELECT
+    u.id,
+    p.user_id, p.user_multi_id, p.resource_id, p.email, p.password, p.post_code, p.address, p.address_kana, p.tel, p.created_at, p.updated_at, p.deleted_at, p.purged_expires_at,
+    pr.created_at AS provision_created_at,
+    pr.expired_at
+FROM user_provision pr
+JOIN users u ON pr.user_id = u.id
+LEFT JOIN user_profiles p ON u.id = p.user_id
+LEFT JOIN user_actives a ON u.id = a.user_id
+LEFT JOIN user_deletes d ON u.id = d.user_id
 `
 
 type GetProvisionUserRow struct {
 	bun.BaseModel
-	UserID             int64          `db:"user_id" json:"user_id" bun:"user_i_d"`
-	UserMultiID        string         `db:"user_multi_id" json:"user_multi_id" bun:"user_multi_i_d"`
-	ResourceID         string         `db:"resource_id" json:"resource_id" bun:"resource_i_d"`
-	Email              string         `db:"email" json:"email" bun:"email"`
-	Password           string         `db:"password" json:"password" bun:"password"`
-	PostCode           string         `db:"post_code" json:"post_code" bun:"post_code"`
-	Address            string         `db:"address" json:"address" bun:"address"`
-	AddressKana        string         `db:"address_kana" json:"address_kana" bun:"address_kana"`
-	Tel                sql.NullString `db:"tel" json:"tel" bun:"tel"`
-	CreatedAt          time.Time      `db:"created_at" json:"created_at" bun:"created_at"`
-	UpdatedAt          time.Time      `db:"updated_at" json:"updated_at" bun:"updated_at"`
-	DeletedAt          bun.NullTime   `db:"deleted_at" json:"deleted_at" bun:"deleted_at"`
-	PurgedExpiresAt    bun.NullTime   `db:"purged_expires_at" json:"purged_expires_at" bun:"purged_expires_at"`
-	ProvisionCreatedAt time.Time      `db:"provision_created_at" json:"provision_created_at" bun:"provision_created_at"`
+	ID			int64		`db:"id" json:"id" bun:"i_d"`
+	UserID			sql.NullInt64	`db:"user_id" json:"user_id" bun:"user_i_d"`
+	UserMultiID		sql.NullString	`db:"user_multi_id" json:"user_multi_id" bun:"user_multi_i_d"`
+	ResourceID		sql.NullString	`db:"resource_id" json:"resource_id" bun:"resource_i_d"`
+	Email			sql.NullString	`db:"email" json:"email" bun:"email"`
+	Password		sql.NullString	`db:"password" json:"password" bun:"password"`
+	PostCode		sql.NullString	`db:"post_code" json:"post_code" bun:"post_code"`
+	Address			sql.NullString	`db:"address" json:"address" bun:"address"`
+	AddressKana		sql.NullString	`db:"address_kana" json:"address_kana" bun:"address_kana"`
+	Tel			sql.NullString	`db:"tel" json:"tel" bun:"tel"`
+	CreatedAt		bun.NullTime	`db:"created_at" json:"created_at" bun:"created_at"`
+	UpdatedAt		bun.NullTime	`db:"updated_at" json:"updated_at" bun:"updated_at"`
+	DeletedAt		bun.NullTime	`db:"deleted_at" json:"deleted_at" bun:"deleted_at"`
+	PurgedExpiresAt		bun.NullTime	`db:"purged_expires_at" json:"purged_expires_at" bun:"purged_expires_at"`
+	ProvisionCreatedAt	time.Time	`db:"provision_created_at" json:"provision_created_at" bun:"provision_created_at"`
+	ExpiredAt		time.Time	`db:"expired_at" json:"expired_at" bun:"expired_at"`
 }
 
 func (q *Queries) GetProvisionUser(ctx context.Context) ([]GetProvisionUserRow, error) {
@@ -167,6 +198,7 @@ func (q *Queries) GetProvisionUser(ctx context.Context) ([]GetProvisionUserRow, 
 	for rows.Next() {
 		var i GetProvisionUserRow
 		if err := rows.Scan(
+			&i.ID,
 			&i.UserID,
 			&i.UserMultiID,
 			&i.ResourceID,
@@ -181,6 +213,7 @@ func (q *Queries) GetProvisionUser(ctx context.Context) ([]GetProvisionUserRow, 
 			&i.DeletedAt,
 			&i.PurgedExpiresAt,
 			&i.ProvisionCreatedAt,
+			&i.ExpiredAt,
 		); err != nil {
 			return nil, err
 		}

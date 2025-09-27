@@ -25,24 +25,24 @@ func (s *UserService) VerifyUser(
 		return nil, connect.NewError(connect.CodeNotFound, errors.New("user not found"))
 	}
 
-	if req.Msg.VerifyMessage != userProfile[0].UserMultiID {
+	if req.Msg.VerifyMessage != userProfile[0].UserMultiID.String {
 		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("verify message is incorrect"))
 	}
 
 	return &connect.Response[userv1.VerifyUserResponse]{
 		Msg: &userv1.VerifyUserResponse{
 			User: &userv1.User{
-				UserId:          userProfile[0].ResourceID,
-				UserEmail:       userProfile[0].Email,
-				UserName:        &userProfile[0].UserMultiID,
+				UserId:          userProfile[0].ResourceID.String,
+				UserEmail:       userProfile[0].Email.String,
+				UserName:        &userProfile[0].UserMultiID.String,
 				UserTel:         &userProfile[0].Tel.String,
-				CreatedAt:       timestamppb.New(userProfile[0].CreatedAt),
-				UpdatedAt:       timestamppb.New(userProfile[0].UpdatedAt),
+				CreatedAt:       timestamppb.New(userProfile[0].CreatedAt.Time),
+				UpdatedAt:       timestamppb.New(userProfile[0].UpdatedAt.Time),
 				DeletedAt:       timestamppb.New(userProfile[0].DeletedAt.Time),
 				PurgedExpiresAt: timestamppb.New(userProfile[0].PurgedExpiresAt.Time),
 			},
 			UserToken: &userv1.UserToken{
-				Token: userProfile[0].UserMultiID,
+				Token: userProfile[0].UserMultiID.String,
 			},
 		},
 	}, nil
