@@ -11,7 +11,7 @@ service UserService {
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
 
   // Tokenを取得するAPI
-  rpc GetUserToken(GetUserTokenRequest) returns (GetUserTokenResponse);
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
   
   // 仮登録を検証するAPI
   rpc VerifyUser(VerifyUserRequest) returns (VerifyUserResponse);

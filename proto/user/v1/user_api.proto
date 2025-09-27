@@ -4,7 +4,6 @@ package user.v1;
 
 import "user/v1/user.proto";
 import "buf/validate/validate.proto";
-import "google.acl.v1";
 
 
 message CreateUserRequest {
@@ -65,7 +64,7 @@ message VerifyUserResponse {
 }
 
 // UserTokenリクエストテスト用
-message GetUserTokenRequest {
+message GetUserRequest {
   // userResourceId
   string user_email = 1 [(buf.validate.field).string.email = true];
   
@@ -77,8 +76,8 @@ message GetUserTokenRequest {
 }
 
 // レスポンステスト用
-message GetUserTokenResponse {
-  // UserTokenResorce
-  UserToken user_token = 1;
+message GetUserResponse {
+  // UserResorce
+  User user = 1;
 }
 

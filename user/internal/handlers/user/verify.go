@@ -10,9 +10,12 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-func (s *UserService) VerifyUser(ctx context.Context, req *connect.Request[userv1.VerifyUserRequest]) (*connect.Response[userv1.VerifyUserResponse], error) {
+func (s *UserService) VerifyUser(
+	ctx context.Context,
+	req *connect.Request[userv1.VerifyUserRequest],
+) (*connect.Response[userv1.VerifyUserResponse], error) {
 
-	db := s.db
+	db := s.db.DB
 	queries := queries.New(db)
 	userProfile, err := queries.GetProvisionUser(ctx)
 	if err != nil {
@@ -22,13 +25,17 @@ func (s *UserService) VerifyUser(ctx context.Context, req *connect.Request[userv
 		return nil, connect.NewError(connect.CodeNotFound, errors.New("user not found"))
 	}
 
+	if req.Msg.VerifyMessage != userProfile[0].UserMultiID {
+		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("verify message is incorrect"))
+	}
+
 	return &connect.Response[userv1.VerifyUserResponse]{
 		Msg: &userv1.VerifyUserResponse{
 			User: &userv1.User{
 				UserId:          userProfile[0].ResourceID,
 				UserEmail:       userProfile[0].Email,
 				UserName:        &userProfile[0].UserMultiID,
-				UserTel:         &userProfile[0].UserTel,
+				UserTel:         &userProfile[0].Tel.String,
 				CreatedAt:       timestamppb.New(userProfile[0].CreatedAt),
 				UpdatedAt:       timestamppb.New(userProfile[0].UpdatedAt),
 				DeletedAt:       timestamppb.New(userProfile[0].DeletedAt.Time),

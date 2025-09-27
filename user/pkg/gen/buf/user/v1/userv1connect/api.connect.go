@@ -5,13 +5,12 @@
 package userv1connect
 
 import (
+	connect "connectrpc.com/connect"
 	context "context"
 	errors "errors"
+	v1 "github.com/sazajun1390/user/pkg/gen/buf/user/v1"
 	http "net/http"
 	strings "strings"
-
-	connect "connectrpc.com/connect"
-	v1 "github.com/sazajun1390/backendservice/user/pkg/gen/buf/user/v1"
 )
 
 // This is a compile-time assertion to ensure that this generated file and the connect package are
@@ -36,9 +35,8 @@ const (
 const (
 	// UserServiceCreateUserProcedure is the fully-qualified name of the UserService's CreateUser RPC.
 	UserServiceCreateUserProcedure = "/user.v1.UserService/CreateUser"
-	// UserServiceGetUserTokenProcedure is the fully-qualified name of the UserService's GetUserToken
-	// RPC.
-	UserServiceGetUserTokenProcedure = "/user.v1.UserService/GetUserToken"
+	// UserServiceGetUserProcedure is the fully-qualified name of the UserService's GetUser RPC.
+	UserServiceGetUserProcedure = "/user.v1.UserService/GetUser"
 	// UserServiceVerifyUserProcedure is the fully-qualified name of the UserService's VerifyUser RPC.
 	UserServiceVerifyUserProcedure = "/user.v1.UserService/VerifyUser"
 )
@@ -48,7 +46,7 @@ type UserServiceClient interface {
 	// ユーザーを作成するAPI
 	CreateUser(context.Context, *connect.Request[v1.CreateUserRequest]) (*connect.Response[v1.CreateUserResponse], error)
 	// Tokenを取得するAPI
-	GetUserToken(context.Context, *connect.Request[v1.GetUserTokenRequest]) (*connect.Response[v1.GetUserTokenResponse], error)
+	GetUser(context.Context, *connect.Request[v1.GetUserRequest]) (*connect.Response[v1.GetUserResponse], error)
 	// 仮登録を検証するAPI
 	VerifyUser(context.Context, *connect.Request[v1.VerifyUserRequest]) (*connect.Response[v1.VerifyUserResponse], error)
 }
@@ -70,10 +68,10 @@ func NewUserServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(userServiceMethods.ByName("CreateUser")),
 			connect.WithClientOptions(opts...),
 		),
-		getUserToken: connect.NewClient[v1.GetUserTokenRequest, v1.GetUserTokenResponse](
+		getUser: connect.NewClient[v1.GetUserRequest, v1.GetUserResponse](
 			httpClient,
-			baseURL+UserServiceGetUserTokenProcedure,
-			connect.WithSchema(userServiceMethods.ByName("GetUserToken")),
+			baseURL+UserServiceGetUserProcedure,
+			connect.WithSchema(userServiceMethods.ByName("GetUser")),
 			connect.WithClientOptions(opts...),
 		),
 		verifyUser: connect.NewClient[v1.VerifyUserRequest, v1.VerifyUserResponse](
@@ -87,9 +85,9 @@ func NewUserServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 
 // userServiceClient implements UserServiceClient.
 type userServiceClient struct {
-	createUser   *connect.Client[v1.CreateUserRequest, v1.CreateUserResponse]
-	getUserToken *connect.Client[v1.GetUserTokenRequest, v1.GetUserTokenResponse]
-	verifyUser   *connect.Client[v1.VerifyUserRequest, v1.VerifyUserResponse]
+	createUser *connect.Client[v1.CreateUserRequest, v1.CreateUserResponse]
+	getUser    *connect.Client[v1.GetUserRequest, v1.GetUserResponse]
+	verifyUser *connect.Client[v1.VerifyUserRequest, v1.VerifyUserResponse]
 }
 
 // CreateUser calls user.v1.UserService.CreateUser.
@@ -97,9 +95,9 @@ func (c *userServiceClient) CreateUser(ctx context.Context, req *connect.Request
 	return c.createUser.CallUnary(ctx, req)
 }
 
-// GetUserToken calls user.v1.UserService.GetUserToken.
-func (c *userServiceClient) GetUserToken(ctx context.Context, req *connect.Request[v1.GetUserTokenRequest]) (*connect.Response[v1.GetUserTokenResponse], error) {
-	return c.getUserToken.CallUnary(ctx, req)
+// GetUser calls user.v1.UserService.GetUser.
+func (c *userServiceClient) GetUser(ctx context.Context, req *connect.Request[v1.GetUserRequest]) (*connect.Response[v1.GetUserResponse], error) {
+	return c.getUser.CallUnary(ctx, req)
 }
 
 // VerifyUser calls user.v1.UserService.VerifyUser.
@@ -112,7 +110,7 @@ type UserServiceHandler interface {
 	// ユーザーを作成するAPI
 	CreateUser(context.Context, *connect.Request[v1.CreateUserRequest]) (*connect.Response[v1.CreateUserResponse], error)
 	// Tokenを取得するAPI
-	GetUserToken(context.Context, *connect.Request[v1.GetUserTokenRequest]) (*connect.Response[v1.GetUserTokenResponse], error)
+	GetUser(context.Context, *connect.Request[v1.GetUserRequest]) (*connect.Response[v1.GetUserResponse], error)
 	// 仮登録を検証するAPI
 	VerifyUser(context.Context, *connect.Request[v1.VerifyUserRequest]) (*connect.Response[v1.VerifyUserResponse], error)
 }
@@ -130,10 +128,10 @@ func NewUserServiceHandler(svc UserServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(userServiceMethods.ByName("CreateUser")),
 		connect.WithHandlerOptions(opts...),
 	)
-	userServiceGetUserTokenHandler := connect.NewUnaryHandler(
-		UserServiceGetUserTokenProcedure,
-		svc.GetUserToken,
-		connect.WithSchema(userServiceMethods.ByName("GetUserToken")),
+	userServiceGetUserHandler := connect.NewUnaryHandler(
+		UserServiceGetUserProcedure,
+		svc.GetUser,
+		connect.WithSchema(userServiceMethods.ByName("GetUser")),
 		connect.WithHandlerOptions(opts...),
 	)
 	userServiceVerifyUserHandler := connect.NewUnaryHandler(
@@ -146,8 +144,8 @@ func NewUserServiceHandler(svc UserServiceHandler, opts ...connect.HandlerOption
 		switch r.URL.Path {
 		case UserServiceCreateUserProcedure:
 			userServiceCreateUserHandler.ServeHTTP(w, r)
-		case UserServiceGetUserTokenProcedure:
-			userServiceGetUserTokenHandler.ServeHTTP(w, r)
+		case UserServiceGetUserProcedure:
+			userServiceGetUserHandler.ServeHTTP(w, r)
 		case UserServiceVerifyUserProcedure:
 			userServiceVerifyUserHandler.ServeHTTP(w, r)
 		default:
@@ -163,8 +161,8 @@ func (UnimplementedUserServiceHandler) CreateUser(context.Context, *connect.Requ
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("user.v1.UserService.CreateUser is not implemented"))
 }
 
-func (UnimplementedUserServiceHandler) GetUserToken(context.Context, *connect.Request[v1.GetUserTokenRequest]) (*connect.Response[v1.GetUserTokenResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("user.v1.UserService.GetUserToken is not implemented"))
+func (UnimplementedUserServiceHandler) GetUser(context.Context, *connect.Request[v1.GetUserRequest]) (*connect.Response[v1.GetUserResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("user.v1.UserService.GetUser is not implemented"))
 }
 
 func (UnimplementedUserServiceHandler) VerifyUser(context.Context, *connect.Request[v1.VerifyUserRequest]) (*connect.Response[v1.VerifyUserResponse], error) {

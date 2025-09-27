@@ -24,3 +24,8 @@ plugins:
   - local: protoc-gen-connect-go
     out: ../user/pkg/gen/buf/
     opt: paths=source_relative
+#  - local: protoc-gen-es
+#    out: ../auth-app/packages/buf/
+#    # Also generate any imported dependencies
+#    include_imports: true
+#    opt: target=ts
